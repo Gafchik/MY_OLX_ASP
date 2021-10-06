@@ -3,6 +3,8 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using System.Drawing;
+using Microsoft.AspNetCore.Hosting;
+using Microsoft.AspNetCore.Http;
 
 namespace MY_OLX.Models
 {
@@ -16,5 +18,6 @@ namespace MY_OLX.Models
         public string description { get; set; }
         public float price { get; set; }
         public string img { get; set; }
+        
     }
 }

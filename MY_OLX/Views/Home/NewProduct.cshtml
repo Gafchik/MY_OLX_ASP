@@ -4,7 +4,7 @@
 }
 
 <h1>New product page</h1>
-<form method="get" action="/Home/Add">
+<form enctype="multipart/form-data" method="post" action="/Home/Add" >
     <h5>New Product :</h5>
     <p>Category :</p>
     <input type="text" name="product.category" />
@@ -18,8 +18,9 @@
     <input type="text" name="product.description" />
     <p>Price :</p>
     <input type="number" step="any" name="product.price" />
-    <p>Img url :</p>
-    <input type="text" name="product.img" />
+    <p>Img :</p>
+    <input type="file" name="uploadedFile" />
+    @* <input type="text" name="product.img" />*@
     <input type="submit" value="Отправить" />
 </form>
 
