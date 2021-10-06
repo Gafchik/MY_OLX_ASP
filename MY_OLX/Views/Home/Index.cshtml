@@ -1,0 +1,35 @@
+﻿@model MY_OLX.Models.IndexModel
+
+@{
+    ViewData["Title"] = "Index";
+}
+<h1>All product page</h1>
+<link rel="stylesheet" href="~/css/Flex.css" />
+<div class="flex">
+    @foreach (Product product in @Model.products)
+    {
+        <div class="card" style="width: 18rem;">
+            <img src="@product.img" class="card-img-top" alt="...">
+            <div class="card-body">
+                <h5 class="card-title">Model : @product.model</h5>
+                <p class="card-text">@product.description</p>
+            </div>
+            <ul class="list-group list-group-flush">
+                <li class="list-group-item">Category : @product.category</li>
+                <li class="list-group-item">Product : @product.product</li>
+                <li class="list-group-item">Price : @product.price $</li>
+                <li class="list-group-item">Salesman : @product.salesman</li>
+            </ul>
+            <div class="card-body">
+                <form method="get" action="/Home/Del">
+                    <input type="hidden" name="id" value="@product.id">
+                    <input type="submit" value="Удалить" />
+                </form>
+                <form method="get" action="/Home/EditView">
+                    <input type="hidden" name="id" value="@product.id">
+                    <input type="submit" value="Изменить" />
+                </form>
+            </div>
+        </div>  }
+</div>
+

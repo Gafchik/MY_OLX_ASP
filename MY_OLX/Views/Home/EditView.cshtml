@@ -1,0 +1,28 @@
+﻿@model MY_OLX.Models.Product
+
+@{
+    ViewData["Title"] = "EditView";
+}
+<h1>Edit product page</h1>
+<form method="get" action="/Home/EditProduct">
+    <h5>New Product :</h5>
+    <p>Category :</p>
+    <input type="text" name="product.category" value="@Model.category" />
+    <p>Salesman :</p>
+    <input type="text" name="product.salesman" value="@Model.salesman" />
+    <p>Product :</p>
+    <input type="text" name="product.product" value="@Model.product" />
+    <p>Model :</p>
+    <input type="text" name="product.model" value="@Model.model" />
+    <p>Description :</p>
+    <input type="text" name="product.description" value="@Model.description" />
+    <p>Price :</p>
+    <input type="number" step="any" name="product.price" value="@Model.price" />
+    <p>Img url :</p>
+    <input type="text" name="product.img" value="@Model.img" />
+    <input type="hidden" name="product.id" value="@Model.id">
+    <input type="submit" value="Отправить" />
+</form>
+
+
+
