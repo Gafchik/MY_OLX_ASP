@@ -3,6 +3,7 @@ using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
 using MY_OLX.Models;
+using System.Web;
 using System;
 using System.Collections.Generic;
 using System.Diagnostics;
@@ -29,6 +30,21 @@ namespace MY_OLX.Controllers
         public IActionResult NewProduct() => View();
         public IActionResult Del(int id)
         {
+            //находим нашу картинку на сервере
+            string path = ProductRep.GetProducts().Find(i => i.id == id).img;
+            string fullPath = _appEnvironment.WebRootPath + path.Trim('~');
+            if (!System.IO.File.Exists(fullPath))
+            {
+                Debug.WriteLine("not fond");
+                return Redirect("/Home/Index");
+            }
+            // удаляем картинку
+            try {  System.IO.File.Delete(fullPath); }
+            catch (Exception e)
+            {
+                Debug.WriteLine(e.Message);
+                return Redirect("/Home/Index");
+            }
             // удаляем продукт
             ProductRep.Delete(id);
             //обновляем модель индекса с продуктами
@@ -61,14 +77,15 @@ namespace MY_OLX.Controllers
                 return Redirect("/Home/NewProduct");
             if (!CheckProduct(product))
                 return Redirect("/Home/NewProduct");
-
+            #region file         
             // путь к папке Image
             string path = "/Image/" + uploadedFile.FileName;
             // сохраняем файл в папку Files в каталоге wwwroot
             using (var fileStream = new FileStream(_appEnvironment.WebRootPath + path, FileMode.Create))
                 await uploadedFile.CopyToAsync(fileStream);
-            product.img = _appEnvironment.WebRootPath + path;
-
+          // ~ нам говорит о том что мы попадаем в папку wwwroot
+            product.img = "~" + path;
+            #endregion
             //  добавляем продукт         
             ProductRep.AddProducts(product);
             //обновляем модель индекса с продуктами
@@ -91,32 +108,13 @@ namespace MY_OLX.Controllers
         private bool IsImg(string path)
         {
             bool rez;
-            if (path.EndsWith(".png") || path.EndsWith(".jpg"))
+            if (path.EndsWith(".png") || path.EndsWith(".jpg") || path.EndsWith(".JPG") || path.EndsWith(".PNG"))
                 rez = true;
             else
                 rez = false;
             return rez;
         }
         #endregion
-
-        #region file
-        [HttpPost]
-        public async Task<IActionResult> AddFile(IFormFile uploadedFile)
-        {
-            if (uploadedFile != null)
-            {
-                // путь к папке Files
-                string path = "/Image/" + uploadedFile.FileName;
-                // сохраняем файл в папку Files в каталоге wwwroot
-                using (var fileStream = new FileStream(_appEnvironment.WebRootPath + path, FileMode.Create))
-                    await uploadedFile.CopyToAsync(fileStream);
-                
-               indexModel.files.Add(  new FileModel { Name = uploadedFile.FileName, Path = path });
-
-            }
-            return Redirect("/Home/Index");
-        }
-    #endregion
 
 
 
